@@ -10,7 +10,7 @@ class TVector
     int length;
     
     public:
-    TVector(int len = 1)
+    TVector(int len = 5)
     {
         vec = new T[len]{}; 
         length = len;
@@ -32,7 +32,7 @@ class TVector
         T *buf = new T[new_len];
         for(int i = 0; i < min_len; ++i)
             buf[i] = vec[i];
-        
+
         delete []vec;
         vec = buf;
 
@@ -72,6 +72,10 @@ class TVector
     {
         return vec[index];
     };
+    const T& operator[](int index) const
+    {
+        return vec[index];
+    };
     friend ostream& operator<<(ostream &st, TVector <T> &obj)
     {
         for(int i = 0; i < obj.length ; ++i)
@@ -87,29 +91,32 @@ class TVector
 template <class T>
 class TMatrix
 {
-    void *matrix;
+    TVector<T> *matrix;
     int row, column;
     
     public:
-    TMatrix(int r = 1, int col = 1)
+    TMatrix(int r = 1, int col = 1) : row(r), column(col)
     {
-        matrix = new TVector<TVector<T>>(r);
-        // for(int i = 0; i < r; ++i)
-        //     matrix[i] = new TVector<T> (col);
+        matrix = new TVector<T>[row];
+        for (int i = 0; i < row; ++i)
+        {
+            matrix[i] = TVector<T>(column);
+        }
     }
-
-    // TMatrix(TMatrix <T> &obj)
-    // {
-    //     column = obj.column;
-    //     row = obj.row;
-    //     matrix = new T*[row];
-    //     for(int i = 0; i < row; ++i)
-    //         matrix[i] = obj[i];
-    // };
-    // ~TMatrix()
-    // {
-    //     delete []matrix;
-    // }
+    TMatrix(TMatrix <T> &obj) : column(obj.column), row(obj.row)
+    {
+        matrix = new TVector<T>[row];
+        for (int i = 0; i < row; ++i)
+        {
+            matrix[i] = TVector<T>(column);
+            for(int j = 0; j < column; ++j)
+                matrix[i][j] = obj.matrix[i][j];
+        }
+    };
+    ~TMatrix()
+    {
+        delete[] matrix;
+    }
     // TVector& operator=(const TVector <T> &obj)
     // {
     //     delete []vec;
@@ -120,29 +127,34 @@ class TMatrix
     //     return *this;
     // };
     // TVector& operator+=(TVector <T> &obj){};
-    const TVector<T>& operator[](int index)
-    const{
-        return matrix[index];
-    }
+    // Оператор [] для доступа к строке
     TVector<T>& operator[](int index)
     {
         return matrix[index];
     }
-    // friend ostream& operator<<(ostream &st, TVector <T> &obj)
-    // {
-    //     for(int i = 0; i < obj.length ; ++i)
-    //         st << obj.vec[i] << ' ';
-    //     return st;
-    // };
-
+    const TVector<T>& operator[](int index) const
+    {
+        return matrix[index];
+    }
+    friend ostream& operator<<(ostream& st, TMatrix<T>& obj)
+    {
+        for (int i = 0; i < obj.row; ++i)
+        {
+            st << obj.matrix[i] << '\n';
+        }
+        return st;
+    }
 };
 
 
 int main()
 {
     TMatrix<int> mat1(2, 3);
-    mat1[1][1] = 1;
-    cout << mat1[1][1];
+    mat1[1][2] = 18;
+    cout << mat1;
+    TMatrix<int> mat2(mat1);
+    cout << mat2;
+
 
 
 //     TVector<double> vec1(3);

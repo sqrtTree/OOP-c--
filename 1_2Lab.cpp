@@ -170,13 +170,7 @@ using namespace std;
             for (int i = 0; i + 1 < size; ++i)
                 for (int j = 0; j + 1 < size - i; ++j)
                     if (arr[j + 1]->get_length() < arr[j]->get_length())
-                    {
                         swap(arr[j], arr[j + 1]);
-                        // CStr *buf;
-                        // arr[j] = buf;
-                        // arr[j] = arr[j + 1];
-                        // arr[j + 1] = buf;
-                    };
         };
         bool check_sort()
         {
