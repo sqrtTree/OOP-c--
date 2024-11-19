@@ -67,27 +67,27 @@ class TVector
 
         delete []buf;
         return *this;
-    };
+    }
     T& operator[](int index)
     {
         return vec[index];
-    };
+    }
     const T& operator[](int index) const
     {
         return vec[index];
-    };
+    }
     friend ostream& operator<<(ostream &st, TVector <T> &obj)
     {
         for(int i = 0; i < obj.length ; ++i)
             st << obj.vec[i] << ' ';
         return st;
-    };
+    }
     int get_len()
     {
         return length;
-    };
+    }
 };
-//////////////////////////////////////////////////////////////////////////////////
+
 template <class T>
 class TMatrix
 {
@@ -117,8 +117,11 @@ class TMatrix
     {
         delete[] matrix;
     }
-    TVector<T>& operator=(const TVector <T> &obj)
+    TMatrix<T>& operator=(const TMatrix <T> &obj)
     {
+        if (this == &obj)
+            return *this;
+
         delete []matrix;
 
         row = obj.row;
@@ -128,15 +131,16 @@ class TMatrix
 
         for(int i = 0; i < row; ++i)
             matrix[i] = obj.matrix[i];
+
         return *this;
-    };
+    }
     TMatrix<T>& operator+=(const TMatrix<T>& obj)
     {
         for (int i = 0; i < row; ++i)
         {
             for (int j = 0; j < column; ++j)
             {
-                (*this)[i][j] += obj[i][j];
+                matrix[i][j] += obj[i][j];
             }
         }
         return *this;
@@ -165,10 +169,15 @@ int main()
     TMatrix<int> mat1(2, 3);
     mat1[1][2] = 18;
     cout << mat1;
+
     TMatrix<int> mat2(mat1);
     mat2[1][1] = 18;
     cout << mat2;
+
     mat1 += mat2;
+    cout << mat1;
+
+    mat1 = mat2;
     cout << mat1;
 
 
@@ -205,8 +214,6 @@ int main()
 
 //     vec3.setLength(5);
 //     cout << "new length: " << vec3 << endl;
-
-
 
     return 0;
 }
