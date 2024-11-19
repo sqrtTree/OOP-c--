@@ -120,21 +120,27 @@ class TMatrix
     TVector<T>& operator=(const TVector <T> &obj)
     {
         delete []matrix;
-        
+
         row = obj.row;
         column = obj.column;
 
         matrix = new TVector<T>[row];
-        for (int i = 0; i < row; ++i)
-        {
-            matrix[i] = TVector<T>(column);
-        }
 
         for(int i = 0; i < row; ++i)
             matrix[i] = obj.matrix[i];
         return *this;
     };
-    // TVector& operator+=(TVector <T> &obj){};
+    TMatrix<T>& operator+=(const TMatrix<T>& obj)
+    {
+        for (int i = 0; i < row; ++i)
+        {
+            for (int j = 0; j < column; ++j)
+            {
+                (*this)[i][j] += obj[i][j];
+            }
+        }
+        return *this;
+    }
     TVector<T>& operator[](int index)
     {
         return matrix[index];
@@ -162,7 +168,7 @@ int main()
     TMatrix<int> mat2(mat1);
     mat2[1][1] = 18;
     cout << mat2;
-    mat1 = mat2;
+    mat1 += mat2;
     cout << mat1;
 
 
