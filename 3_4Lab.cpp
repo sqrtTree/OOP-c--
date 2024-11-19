@@ -117,17 +117,24 @@ class TMatrix
     {
         delete[] matrix;
     }
-    // TVector& operator=(const TVector <T> &obj)
-    // {
-    //     delete []vec;
-    //     length = obj.length;
-    //     vec = new T[length];
-    //     for(int i = 0; i < length; ++i)
-    //         vec[i] = obj.vec[i];
-    //     return *this;
-    // };
+    TVector<T>& operator=(const TVector <T> &obj)
+    {
+        delete []matrix;
+        
+        row = obj.row;
+        column = obj.column;
+
+        matrix = new TVector<T>[row];
+        for (int i = 0; i < row; ++i)
+        {
+            matrix[i] = TVector<T>(column);
+        }
+
+        for(int i = 0; i < row; ++i)
+            matrix[i] = obj.matrix[i];
+        return *this;
+    };
     // TVector& operator+=(TVector <T> &obj){};
-    // Оператор [] для доступа к строке
     TVector<T>& operator[](int index)
     {
         return matrix[index];
@@ -153,7 +160,10 @@ int main()
     mat1[1][2] = 18;
     cout << mat1;
     TMatrix<int> mat2(mat1);
+    mat2[1][1] = 18;
     cout << mat2;
+    mat1 = mat2;
+    cout << mat1;
 
 
 
