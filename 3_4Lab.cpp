@@ -20,12 +20,14 @@ class TVector
         length = obj.length;
         vec = new T[length];
         for(int i = 0; i < length; ++i)
+        {
             vec[i] = obj[i];
+        }
     };
     ~TVector()
     {
         delete []vec;
-    };
+    }
     void setLength(int new_len)
     {
         int min_len = min(length, new_len);
@@ -37,35 +39,40 @@ class TVector
         vec = buf;
 
         length = new_len;
-    };
+    }
     TVector& operator=(const TVector <T> &obj)
     {
+        if (this == &obj)
+            return *this;
+        
         delete []vec;
+        
         length = obj.length;
         vec = new T[length];
+
         for(int i = 0; i < length; ++i)
+        {
             vec[i] = obj.vec[i];
+        }
         return *this;
-    };
+    }
     TVector& operator+=(TVector <T> &obj)
     {
-        T *buf = new T[length];
-        for(int i = 0; i < length; ++i)
-            buf[i] = vec[i];
-
-        delete []vec;
-        vec = new T[length * 2]{};
-
+        T *buf = new T[length * 2];
         int i = 0;
         for(; i < length; ++i)
-            vec[i] = buf[i];
+        {
+            buf[i] = vec[i];
+        }
+        delete []vec;
 
         length *= 2;
-
         for(int j = 0; i < length; ++i, ++j)
-            vec[i] = obj.vec[j];
+        {
+            buf[i] = obj.vec[j];
+        }
+        vec = buf;
 
-        delete []buf;
         return *this;
     }
     T& operator[](int index)
@@ -108,11 +115,9 @@ class TMatrix
         matrix = new TVector<T>[row];
         for (int i = 0; i < row; ++i)
         {
-            matrix[i] = TVector<T>(column);
-            for(int j = 0; j < column; ++j)
-                matrix[i][j] = obj.matrix[i][j];
+            matrix[i] = obj.matrix[i];
         }
-    };
+    }
     ~TMatrix()
     {
         delete[] matrix;
@@ -168,17 +173,17 @@ int main()
 {
     TMatrix<int> mat1(2, 3);
     mat1[1][2] = 18;
-    cout << mat1;
+    cout << mat1 << endl;
 
     TMatrix<int> mat2(mat1);
     mat2[1][1] = 18;
-    cout << mat2;
+    cout << mat2 << endl;
 
     mat1 += mat2;
-    cout << mat1;
+    cout << mat1 << endl;
 
     mat1 = mat2;
-    cout << mat1;
+    cout << mat1 << endl;
 
 
 
